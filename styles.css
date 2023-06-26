@@ -1,0 +1,51 @@
+.container {
+    height: 100vh;
+    width: 100vh;
+    background-color: grey;
+}
+
+
+
+.indBlock {
+    width: 10vh;
+    height: 5vh;
+    background-color: red;
+}
+/* 
+#block1 {
+    width: 10vh;
+    height: 5vh;
+    background-color: red;
+}
+
+#block2 {
+    width: 10vh;
+    height: 5vh;
+    background-color: yellow;
+}
+
+#block3 {
+    width: 10vh;
+    height: 5vh;
+    background-color: red;
+} */
+
+.paddle {
+    position: absolute;
+    top: 100vh;
+    left: 50vh;
+    height: 20px;
+    width: 60px;
+    background-color: red;
+    border-radius: 10px;
+}
+
+.ball {
+    position: absolute;
+    top: 97vh;
+    left: 53vh;
+    height: 20px;
+    width: 20px;
+    background-color: white;
+    border-radius: 20px;
+}
