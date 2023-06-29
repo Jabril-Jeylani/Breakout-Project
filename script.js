@@ -2,6 +2,8 @@
 
 const canvas = document.getElementById('canvas')
 const ctx = canvas.getContext('2d')
+let rightPress = false;
+let leftPress = false;
 
 const circle = {
     x: 300,
@@ -27,42 +29,42 @@ function updateCircle() {
     circle.y += circle.dy;
 
     // Detect side walls
-    if (circle.x + circle.dx > canvas.width - circle.size || circle.x + circle.dx < circle.size) {
+    if (circle.x + circle.size > canvas.width || circle.x - circle.size < 0) {
         circle.dx = -circle.dx
     }
-
-    if (circle.y + circle.dy > canvas.width - circle.size || circle.y + circle.dy < circle.size) {
+    if (circle.y + circle.size > canvas.height || circle.y - circle.size < 0) {
         circle.dy = -circle.dy
     }
     // Detect Paddle
-    if (circle.x + circle.size > paddle.x || circle.x - circle.size < paddle.x) {
+    
+    if (circle.x > paddle.x && circle.y < paddle.y ) {
+        console.log('Circle: ', circle)
+        console.log('Paddle: ', paddle)
         circle.dx = -circle.dx
     }
-    
-    if (circle.y + circle.size > paddle.y || circle.y - circle.size < paddle.y) {
-        circle.dy = -circle.dy
-    }
+    // if (circle.y > paddle.y || circle.y < paddle.y) {
+    //     circle.dy = -circle.dy
+    // }
     // if (circle.x > paddle.x) {
     //     circle.dx = -circle.dx
     // }
-    
+    // if (circle.x < paddle.x + paddle.w) {
+    //     circle.dx = -circle.dx
+    // }
     // if (circle.y > paddle.y) {
     //     circle.dy = -circle.dy
     // }
-    
-    
-    
+    // if (circle.y < paddle.y + paddle.h) {
+    //     circle.dy = -circle.dy
+    // }
     
 }
-
 
 const paddle = {
     w: 100, 
     h: 20, 
     x: 250, 
     y: 500, 
-    dx: 0, 
-    dy: 0
 }
 
 function drawPaddle() {
@@ -75,24 +77,20 @@ function clear() {
     ctx.clearRect(0,0, canvas.width, canvas.height)
 }
 
-// function newPos() {
-//     paddle.x += paddle.dx
-//     paddle.y += paddle.dy
-
-//     detectWalls()
-// }
-
-// function detectWalls() {
-//     // Left Wall
-//     if (paddle.x < 0) {
-//         paddle.x = 0;        
-//     }
-//     // Right Wall
-//     if (paddle.x + paddle.w > canvas.width) {
-//         paddle.x = canvas.width - paddle.w
-//     }
-// }
-
+function movement() {
+    if (rightPress) {
+        paddle.x += 5;
+        if (paddle.x + paddle.w > canvas.width) {
+            paddle.x = canvas.width - paddle.w
+        }
+    }
+    else if (leftPress) {
+        paddle.x -= 5;
+        if (paddle.x < 0) {
+            paddle.x = 0
+        }
+    }
+}
 function update() {
     clear()
 
@@ -100,21 +98,38 @@ function update() {
 
     drawCircle()
 
-    // newPos()
+    movement()
 
     requestAnimationFrame(updateCircle)
 
     requestAnimationFrame(update)
 }
 
-document.addEventListener('mousemove', (e) => {
-    paddle.x = Math.min(e.offsetX, canvas.width - paddle.w) 
-});
 
+document.addEventListener('keydown', keyDown, false)
+document.addEventListener('keyup', keyUp, false)
 
+function keyDown(e) {
+    if (e.key === 'Right' || e.key === 'ArrowRight') {
+        rightPress = true;
+    }
+    else if (e.key === 'Left' || e.key === 'ArrowLeft') {
+        leftPress = true;
+    }
+}
+
+function keyUp(e) {
+    if (e.key === 'Right' || e.key === 'ArrowRight') {
+        rightPress = false;
+    }
+    else if (e.key === 'Left' || e.key === 'ArrowLeft') {
+        leftPress = false;
+    }
+}
 
 update()
 
+// const interval = setInterval(updateCircle, 10)
 
 
 
@@ -129,64 +144,4 @@ update()
 
 
 
-
-
-
-
-
-
-// const paddle = {
-//     x: 250, 
-//     y: 550, 
-//     width: 100, 
-//     height: 10,
-//     draw() {
-//         ctx.beginPath()
-//         ctx.fillRect(this.x, this.y, this.width, this.height)
-//         ctx.closePath()
-//     }
-// }
-
-// const ball = {
-//     x: 300, 
-//     y: 540, 
-//     vx: 5,
-//     vy: 2,
-//     radius: 10,
-//     color: 'black',
-//     draw() {
-//         ctx.beginPath()
-//         ctx.arc(this.x, this.y, this.radius, 0, Math.PI *2, true)
-//         ctx.closePath()
-//         ctx.fillStyle = this.color
-//         ctx.fill()
-//     }
-// }
-
-// function draw() {
-//     ctx.clearRect(0,0, canvas.width, canvas.height)
-//     ball.draw()
-//     paddle.draw()
-//     ball.x += ball.vx
-//     ball.y += ball.vy
-    
-
-//     if (ball.y + ball.vy > canvas.height || ball.y + ball.vy < 0) {
-//         ball.vy = -ball.vy;
-//       }
-//       if (ball.x + ball.vx > canvas.width || ball.x + ball.vx < 0) {
-//         ball.vx = -ball.vx;
-//       }
-//     raf = window.requestAnimationFrame(draw)
-// }
-
-// canvas.addEventListener('mouseover', (e) => {
-//     raf = window.requestAnimationFrame(draw)
-// })
-
-// canvas.addEventListener('mouseout', (e) => {
-//     window.cancelAnimationFrame(raf)
-// })
-
-// ball.draw()
 
