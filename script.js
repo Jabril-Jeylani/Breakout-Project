@@ -136,7 +136,7 @@ function collisionDetection() {
                         }
                     }
                 }
-                if (score === (brick.row * brick.column) * 2) {
+                if (score === (30) ) {
                     alert('Game Done!')
                     document.location.reload()
                 }
